@@ -1,0 +1,11 @@
+syntax = "proto3";
+option go_package = "api/pb";
+
+message CreateRequest {
+    string first_name = 1;
+    string second_name = 2;
+}
+
+message GetByIdRequest {
+    uint64 id = 1;  
+}

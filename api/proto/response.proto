@@ -1,0 +1,12 @@
+syntax = "proto3";
+option go_package = "api/pb";
+
+import "model.proto";
+
+message CreateResponse {
+    Profile profile = 1; 
+}
+
+message GetByIdResponse {
+    Profile profile = 1; 
+}  
