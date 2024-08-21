@@ -2,13 +2,20 @@ package app
 
 import (
 	"context"
+	"log"
 	"log/slog"
 	"net"
 	"sync"
 
+	_ "github.com/jackc/pgx/v5/stdlib"
+
+	"github.com/jmoiron/sqlx"
 	"github.com/pawpawchat/profile/api/pb"
 	"github.com/pawpawchat/profile/config"
+	"github.com/pawpawchat/profile/internal/domain/service"
+	"github.com/pawpawchat/profile/internal/infrastructure/repository"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func Run(ctx context.Context, config *config.Config) error {
@@ -19,7 +26,7 @@ func Run(ctx context.Context, config *config.Config) error {
 	}
 
 	var wg sync.WaitGroup
-	grpcServer := newGRPCServer()
+	grpcServer := newGRPCServer(config)
 
 	// запускаем сервер
 	wg.Add(1)
@@ -43,9 +50,18 @@ func Run(ctx context.Context, config *config.Config) error {
 	return err
 }
 
-func newGRPCServer() *grpc.Server {
+func newGRPCServer(config *config.Config) *grpc.Server {
+	db, err := sqlx.Connect("pgx", config.Env().DB_URL)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ps := service.NewProfile(repository.NewProfile(db))
+	profileServer := newProfileGRPCServer(ps)
+
 	grpcServer := grpc.NewServer()
-	profileServer := NewServer()
+	reflection.Register(grpcServer)
+
 	pb.RegisterProfileServiceServer(grpcServer, profileServer)
 	return grpcServer
 }

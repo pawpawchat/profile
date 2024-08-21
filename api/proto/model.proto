@@ -8,6 +8,10 @@ message Profile {
     string username = 2;
     string description = 3;
     int32 number_of_friends = 4;
+    bool online = 5;
+    google.protobuf.Timestamp last_seen = 6;
+    google.protobuf.Timestamp created_at = 7;
+    Biography biography = 8;
 }
 
 message Biography {
@@ -15,3 +19,4 @@ message Biography {
     string second_name = 2;
     google.protobuf.Timestamp birthday = 3;
 }
+
