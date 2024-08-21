@@ -3,9 +3,11 @@ package config
 import (
 	"flag"
 	"fmt"
+	"log"
 	"log/slog"
 	"os"
 
+	"github.com/joho/godotenv"
 	"gopkg.in/yaml.v3"
 )
 
@@ -22,6 +24,7 @@ type Config struct {
 type Environment struct {
 	GRPC_SERVER_ADDR string `yaml:"grpc_server_addr"`
 	LOG_LEVEL        string `yaml:"log_level"`
+	DB_URL           string `yaml:"database_url"`
 }
 
 func (c *Config) Env() *Environment {
@@ -29,6 +32,10 @@ func (c *Config) Env() *Environment {
 }
 
 func LoadConfig(filePath string) (*Config, error) {
+	if err := godotenv.Load("../.env"); err != nil {
+		log.Fatal(err)
+	}
+
 	configFile, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
@@ -40,6 +47,10 @@ func LoadConfig(filePath string) (*Config, error) {
 
 	if err != nil {
 		return nil, err
+	}
+
+	for i := range config.Environment {
+		config.Environment[i].DB_URL = os.ExpandEnv(config.Environment[i].DB_URL)
 	}
 
 	return &config, nil

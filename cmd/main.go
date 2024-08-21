@@ -16,6 +16,7 @@ import (
 func main() {
 	flag.Parse()
 
+	// read the config file
 	cfg, err := config.LoadConfig("config.yaml")
 	if err != nil {
 		log.Fatal(err)
@@ -25,6 +26,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// main application context
 	ctx, cancel := context.WithCancel(context.Background())
 
 	// catch the signal of the shutdown programm
@@ -36,6 +38,7 @@ func main() {
 		cancel()
 	}()
 
+	// run the application
 	err = app.Run(ctx, cfg)
 
 	if err != nil {

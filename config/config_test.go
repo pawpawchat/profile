@@ -2,6 +2,7 @@ package config
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"testing"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func TestLoadConfig(t *testing.T) {
+	flag.Set("env", "testing")
 	flag.Parse()
 
 	wd, err := os.Getwd()
@@ -17,7 +19,11 @@ func TestLoadConfig(t *testing.T) {
 	config, err := LoadConfig(wd + "/../config.yaml")
 	assert.NoError(t, err)
 
-	assert.NotNil(t, config, config.Env().GRPC_SERVER_ADDR)
+	assert.NotNil(t, config)
+	assert.NotEmpty(t, config.Env().GRPC_SERVER_ADDR)
+	assert.NotEmpty(t, config.Env().DB_URL)
+
+	fmt.Println("url=", config.Env().DB_URL)
 }
 
 func TestConfigureLogger(t *testing.T) {

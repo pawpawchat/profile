@@ -5,3 +5,7 @@ environment:
   development:
     grpc_server_addr: localhost:9400
     log_level: debug
+  testing:
+    grpc_server_addr: localhost:9400
+    log_level: debug
+    database_url: ${DB_TEST_URL}
