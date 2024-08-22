@@ -3,7 +3,6 @@ package config
 import (
 	"flag"
 	"fmt"
-	"log"
 	"log/slog"
 	"os"
 
@@ -32,9 +31,7 @@ func (c *Config) Env() *Environment {
 }
 
 func LoadConfig(filePath string) (*Config, error) {
-	if err := godotenv.Load("../.env"); err != nil {
-		log.Fatal(err)
-	}
+	godotenv.Load("../.env")
 
 	configFile, err := os.Open(filePath)
 	if err != nil {
