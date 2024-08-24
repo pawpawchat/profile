@@ -56,7 +56,11 @@ func newGRPCServer(config *config.Config) *grpc.Server {
 		log.Fatal(err)
 	}
 
-	ps := service.NewProfile(repository.NewProfile(db))
+	pr := repository.NewProfileRepository(db)
+	br := repository.NewBiographyRepository(db)
+	ar := repository.NewAvatarsRepository(db)
+
+	ps := service.NewProfileService(pr, br, ar)
 	profileServer := newProfileGRPCServer(ps)
 
 	grpcServer := grpc.NewServer()

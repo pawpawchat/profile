@@ -11,12 +11,24 @@ proto:
 MIGRATE = migrate
 MIGR_DIR = migrations
 DB_SOURCE = postgres://amicie:admin@localhost:5432/$(1)?sslmode=disable
-MIGRATE_BODY = ${MIGRATE} -path ${MIGR_DIR} -database $(call DB_SOURCE,$(db)) 
+MIGRATE_BODY = ${MIGRATE} -path ${MIGR_DIR} -database $(call DB_SOURCE,$(db))
 
-migrate:
-ifndef db
-	@$(error parameter db is required)
-endif
-	@${MIGRATE_BODY} force 1
-	@yes | ${MIGRATE_BODY} down 
+migrate: check_db
 	@${MIGRATE_BODY} up
+
+migrate_force: check_db check_v
+	@${MIGRATE_BODY} force ${v}
+
+migrate_down:
+	@${MIGRATE_BODY} down
+
+check_db:
+ifndef db
+	@$(error parameter db is required [database name])
+endif
+
+check_v:
+ifndef v
+	@$(error parameter v is required [version])
+endif
+

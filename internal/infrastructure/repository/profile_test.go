@@ -13,19 +13,27 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func testProfile() *model.Profile {
-	return &model.Profile{
-		Username: "some-username",
-		Biography: model.Biography{
-			FirstName:  "first-name",
-			SecondName: "second-name",
-		},
-	}
+func testingProfile() *model.Profile {
+	return &model.Profile{}
 }
 
-func TestCreateProfile(t *testing.T) {
-	db, r := getTestDbContext(t)
+func getTestingDB(t *testing.T) *sqlx.DB {
+	flag.Set("env", "testing")
+	flag.Parse()
+
+	config, err := config.LoadDefaultConfig()
+	assert.NoError(t, err)
+
+	db, err := sqlx.Connect("pgx", config.Env().DB_URL)
+
+	assert.NoError(t, err)
+	return db
+}
+func TestProfileRepository_CreateProfile(t *testing.T) {
+	db := getTestingDB(t)
 	defer db.Close()
+
+	r := repository.NewProfileRepository(db)
 
 	testCases := []struct {
 		desc    string
@@ -36,8 +44,7 @@ func TestCreateProfile(t *testing.T) {
 			"correct data",
 			true,
 			func() *model.Profile {
-				profile := testProfile()
-				return profile
+				return testingProfile()
 			},
 		},
 	}
@@ -46,13 +53,13 @@ func TestCreateProfile(t *testing.T) {
 		t.Run(tc.desc, func(t *testing.T) {
 			//exec query
 			profile := tc.profile()
-			err := r.CreateProfile(context.Background(), profile)
+			err := r.Create(context.Background(), profile)
 
 			// check result
 			switch tc.valid {
 			case true:
 				assert.NoError(t, err)
-				assert.NotZero(t, profile.Id, profile.Username, profile.Biography.FirstName, profile.Biography.SecondName, profile.CreatedAt)
+				assert.NotZero(t, profile.ID, profile.Username, profile.CreatedAt, profile.LastSeen)
 			case false:
 				assert.Error(t, err)
 			}
@@ -60,29 +67,39 @@ func TestCreateProfile(t *testing.T) {
 	}
 }
 
-func TestGetById(t *testing.T) {
-	db, r := getTestDbContext(t)
+func TestProfileRepository_GetById(t *testing.T) {
+	db := getTestingDB(t)
 	defer db.Close()
+
+	r := repository.NewProfileRepository(db)
+	br := repository.NewBiographyRepository(db)
+
+	profile := testingProfile()
+	r.Create(context.Background(), profile)
+
+	biography := testingBiography()
+	biography.ProfileID = profile.ID
+	br.Create(context.Background(), biography)
 
 	testCases := []struct {
 		desc  string
-		id    uint64
+		id    int64
 		valid bool
 	}{
-		{"profile exists", 1, true},
-		// {"profile not found", 0, false},
+		{"profile exists", profile.ID, true},
+		{"profile not found", 0, false},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
 			// query
-			_, err := r.GetById(context.Background(), tc.id)
+			profile, err := r.GetById(context.Background(), tc.id)
 			// check result
 			switch tc.valid {
 			case true:
 				assert.NoError(t, err)
-				// assert.NotNil(t, res)
-				// assert.NotZero(t, res.Biography)
+				assert.NotNil(t, profile)
+				assert.NotZero(t, profile.Biography)
 			case false:
 				assert.Error(t, err)
 			}
@@ -90,17 +107,73 @@ func TestGetById(t *testing.T) {
 	}
 }
 
-func getTestDbContext(t *testing.T) (*sqlx.DB, *repository.ProfileRepository) {
-	flag.Set("env", "testing")
-	flag.Parse()
+func TestProfileRepository_GetByUsername(t *testing.T) {
+	db := getTestingDB(t)
+	defer db.Close()
 
-	config, err := config.LoadConfig("../../../config.yaml")
-	assert.NoError(t, err)
+	r := repository.NewProfileRepository(db)
+	br := repository.NewBiographyRepository(db)
 
-	db, err := sqlx.Connect("pgx", config.Env().DB_URL)
+	profile := testingProfile()
+	r.Create(context.Background(), profile)
 
-	assert.NoError(t, err)
-	r := repository.NewProfile(db)
+	biography := testingBiography()
+	biography.ProfileID = profile.ID
+	br.Create(context.Background(), biography)
 
-	return db, r
+	testCases := []struct {
+		desc     string
+		username string
+		valid    bool
+	}{
+		{"profile exists", profile.Username, true},
+		{"profile not found", "", false},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.desc, func(t *testing.T) {
+			// query
+			profile, err := r.GetByUsername(context.Background(), tc.username)
+			// check result
+			switch tc.valid {
+			case true:
+				assert.NoError(t, err)
+				assert.NotNil(t, profile)
+				assert.NotZero(t, profile.Biography)
+			case false:
+				assert.Error(t, err)
+			}
+		})
+	}
+}
+
+func TestProfileRepository_SetAvatar(t *testing.T) {
+	db := getTestingDB(t)
+	defer db.Close()
+
+	r := repository.NewProfileRepository(db)
+
+	testCases := []struct {
+		desc      string
+		profileID int64
+		avatarID  int64
+		valid     bool
+	}{
+		{"avatar exists", 1, 1, true},
+		{"profile not found", 0, 1, false},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.desc, func(t *testing.T) {
+			// query
+			err := r.SetAvatar(context.Background(), tc.profileID, tc.avatarID)
+			// check result
+			switch tc.valid {
+			case true:
+				assert.NoError(t, err)
+			case false:
+				assert.Error(t, err)
+			}
+		})
+	}
 }

@@ -1,11 +1,15 @@
 syntax = "proto3";
 option go_package = "api/pb";
 
-message CreateRequest {
+message CreateProfileRequest {
     string first_name = 1;
     string second_name = 2;
 }
 
-message GetByIdRequest {
-    uint64 id = 1;  
+message GetProfileByIdRequest {
+    int64 id = 1;  
+}
+
+message GetProfileByUsernameRequest {
+    string username = 1;  
 }

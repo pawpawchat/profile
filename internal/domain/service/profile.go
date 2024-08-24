@@ -6,25 +6,27 @@ import (
 	"github.com/pawpawchat/profile/internal/domain/model"
 )
 
-// Репозиторий явлвяется адаптер для базы данных
 type ProfileRepository interface {
-	CreateProfile(ctx context.Context, profile *model.Profile) error
-	GetById(ctx context.Context, id uint64) (*model.Profile, error)
+	Create(context.Context, *model.Profile) error
+	GetById(context.Context, int64) (*model.Profile, error)
+	GetByUsername(context.Context, string) (*model.Profile, error)
 }
 
-// Сервис обращается к репозиториям и API зависимых от операции сервисов
+type AvatarRepository interface {
+	Create(ctx context.Context, avatar *model.Avatar) error
+}
+
+type BiographyRepository interface {
+	Create(ctx context.Context, bio *model.Biography) error
+}
+
+// Service has access to repositories and APIs of other services
 type ProfileService struct {
-	profileRepository ProfileRepository
+	profileRepository   ProfileRepository
+	biographyRepository BiographyRepository
+	avatarRepository    AvatarRepository
 }
 
-func NewProfile(profileRepository ProfileRepository) *ProfileService {
-	return &ProfileService{profileRepository}
-}
-
-func (s *ProfileService) CreateProfile(ctx context.Context, profile *model.Profile) error {
-	return s.profileRepository.CreateProfile(ctx, profile)
-}
-
-func (s *ProfileService) GetProfilrById(ctx context.Context, id uint64) (*model.Profile, error) {
-	return s.profileRepository.GetById(ctx, id)
+func NewProfileService(pr ProfileRepository, br BiographyRepository, ar AvatarRepository) *ProfileService {
+	return &ProfileService{pr, br, ar}
 }

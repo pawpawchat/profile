@@ -23,6 +23,18 @@ func TestLoadConfig(t *testing.T) {
 	assert.NotEmpty(t, config.Env().DB_URL)
 }
 
+func TestLoadDefaultConfig(t *testing.T) {
+	flag.Set("env", "testing")
+	flag.Parse()
+
+	config, err := LoadDefaultConfig()
+	assert.NoError(t, err)
+
+	assert.NotNil(t, config)
+	assert.NotEmpty(t, config.Env().GRPC_SERVER_ADDR)
+	assert.NotEmpty(t, config.Env().DB_URL)
+}
+
 func TestConfigureLogger(t *testing.T) {
 	flag.Parse()
 

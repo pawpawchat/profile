@@ -5,7 +5,8 @@ import "request.proto";
 import "response.proto";
 
 service ProfileService {
-    rpc Create(CreateRequest) returns (CreateResponse) {}
-    rpc GetById(GetByIdRequest) returns (GetByIdResponse) {}
+    rpc Create(CreateProfileRequest) returns (CreateProfileResponse) {}
+    rpc GetByID(GetProfileByIdRequest) returns (GetProfileByIdResponse) {}
+    rpc GetByUsername(GetProfileByUsernameRequest) returns (GetProfileByUsernameResponse) {}
 }
 

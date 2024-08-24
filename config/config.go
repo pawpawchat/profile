@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"path/filepath"
 
 	"github.com/joho/godotenv"
 	"gopkg.in/yaml.v3"
@@ -30,10 +31,36 @@ func (c *Config) Env() *Environment {
 	return c.Environment[*env]
 }
 
+// LoadConfig загружает конфиг из указанного файла
 func LoadConfig(filePath string) (*Config, error) {
-	godotenv.Load("../.env")
-
 	configFile, err := os.Open(filePath)
+	if err != nil {
+		return nil, err
+	}
+	defer configFile.Close()
+
+	godotenv.Load(filePath + ".env")
+
+	dir := filepath.Dir(filePath)
+
+	godotenv.Load(filepath.Join(dir, ".env"))
+
+	var config Config
+	err = yaml.NewDecoder(configFile).Decode(&config)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range config.Environment {
+		config.Environment[i].DB_URL = os.ExpandEnv(config.Environment[i].DB_URL)
+	}
+
+	return &config, nil
+}
+
+func LoadDefaultConfig() (*Config, error) {
+	configFile, err := FindDefaultConfigFiles()
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +80,32 @@ func LoadConfig(filePath string) (*Config, error) {
 	return &config, nil
 }
 
-// Set the logging level
+func FindDefaultConfigFiles() (*os.File, error) {
+	wd, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+
+	var configFile *os.File
+	for range 5 {
+		fmt.Println(wd)
+		configFile, err = os.Open(filepath.Join(wd, "config.yaml"))
+		if err != nil {
+			wd = filepath.Join(wd, "..")
+			continue
+		}
+		break
+	}
+
+	if configFile == nil {
+		return nil, fmt.Errorf("config file isn't exist")
+	}
+
+	godotenv.Load(filepath.Join(wd, ".env"))
+
+	return configFile, nil
+}
+
 func ConfigureLogger(config *Config) error {
 
 	switch config.Env().LOG_LEVEL {
