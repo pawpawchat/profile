@@ -26,4 +26,5 @@ func TestAvatarRepository_Create(t *testing.T) {
 
 	assert.NoError(t, ar.Create(context.Background(), avatar))
 	assert.NotNil(t, avatar.ID)
+
 }

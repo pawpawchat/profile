@@ -21,8 +21,13 @@ func TestBiographyRepository_Create(t *testing.T) {
 	db := getTestingDB(t)
 	defer db.Close()
 
-	br := repository.NewBiographyRepository(db)
 	bio := testingBiography()
+	prf := testingProfile()
+
+	br := repository.NewBiographyRepository(db)
+	repository.NewProfileRepository(db).Create(context.Background(), prf)
+
+	bio.ProfileID = prf.ID
 
 	assert.NoError(t, br.Create(context.Background(), bio))
 	assert.NotNil(t, bio.ID)

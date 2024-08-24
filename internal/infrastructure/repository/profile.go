@@ -19,7 +19,7 @@ func NewProfileRepository(db *sqlx.DB) *ProfileRepository {
 
 func (r *ProfileRepository) Create(ctx context.Context, profile *model.Profile) error {
 	sql := "INSERT INTO profiles DEFAULT VALUES RETURNING profile_id, username, last_seen, created_at"
-	return r.db.GetContext(ctx, profile, sql)
+	return r.db.QueryRowContext(ctx, sql).Scan(&profile.ID, &profile.Username, &profile.LastSeen, &profile.CreatedAt)
 }
 
 func (r *ProfileRepository) GetById(ctx context.Context, id int64) (*model.Profile, error) {

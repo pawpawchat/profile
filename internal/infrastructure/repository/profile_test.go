@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func testProfile() *model.Profile {
+func testingProfile() *model.Profile {
 	return &model.Profile{}
 }
 
@@ -27,7 +27,6 @@ func getTestingDB(t *testing.T) *sqlx.DB {
 	db, err := sqlx.Connect("pgx", config.Env().DB_URL)
 
 	assert.NoError(t, err)
-
 	return db
 }
 func TestProfileRepository_CreateProfile(t *testing.T) {
@@ -45,8 +44,7 @@ func TestProfileRepository_CreateProfile(t *testing.T) {
 			"correct data",
 			true,
 			func() *model.Profile {
-				profile := testProfile()
-				return profile
+				return testingProfile()
 			},
 		},
 	}
@@ -74,13 +72,21 @@ func TestProfileRepository_GetById(t *testing.T) {
 	defer db.Close()
 
 	r := repository.NewProfileRepository(db)
+	br := repository.NewBiographyRepository(db)
+
+	profile := testingProfile()
+	r.Create(context.Background(), profile)
+
+	biography := testingBiography()
+	biography.ProfileID = profile.ID
+	br.Create(context.Background(), biography)
 
 	testCases := []struct {
 		desc  string
 		id    int64
 		valid bool
 	}{
-		{"profile exists", 1, true},
+		{"profile exists", profile.ID, true},
 		{"profile not found", 0, false},
 	}
 

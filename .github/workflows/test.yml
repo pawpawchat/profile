@@ -2,14 +2,11 @@ on:
   push:
     branches:
       - dev
-  pull_request:
-    branches:
-      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: stage
+    environment: testing
     
     services:
       postgres:
