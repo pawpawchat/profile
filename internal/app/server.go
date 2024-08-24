@@ -20,7 +20,7 @@ func newProfileGRPCServer(profileService ProfileService) *ProfileGRPCServer {
 
 type ProfileService interface {
 	CreateProfile(context.Context, *model.Profile) error
-	GetProfilrById(context.Context, uint64) (*model.Profile, error)
+	GetProfileById(context.Context, int64) (*model.Profile, error)
 }
 
 func (s *ProfileGRPCServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.CreateResponse, error) {
@@ -39,7 +39,7 @@ func (s *ProfileGRPCServer) Create(ctx context.Context, req *pb.CreateRequest) (
 }
 
 func (s *ProfileGRPCServer) GetById(ctx context.Context, req *pb.GetByIdRequest) (*pb.GetByIdResponse, error) {
-	profile, err := s.profileService.GetProfilrById(ctx, req.Id)
+	profile, err := s.profileService.GetProfileById(ctx, req.Id)
 	if err != nil {
 		return nil, fmt.Errorf("profile not found, err=%v", err)
 	}
@@ -56,7 +56,7 @@ func marshalProfile(p *model.Profile) *pb.Profile {
 	}
 
 	return &pb.Profile{
-		Id:              p.Id,
+		Id:              p.ID,
 		Username:        p.Username,
 		Description:     p.Description,
 		NumberOfFriends: p.NumFriends,

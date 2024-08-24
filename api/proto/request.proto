@@ -7,5 +7,5 @@ message CreateRequest {
 }
 
 message GetByIdRequest {
-    uint64 id = 1;  
+    int64 id = 1;  
 }
