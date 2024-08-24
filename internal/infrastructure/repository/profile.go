@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/Masterminds/squirrel"
-	sq "github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
 	"github.com/pawpawchat/profile/internal/domain/model"
 )
@@ -28,11 +27,11 @@ func (r *ProfileRepository) GetById(ctx context.Context, id int64) (*model.Profi
 		model.Biography
 	})
 
-	query, args := sq.Select("*").
+	query, args := squirrel.Select("*").
 		From("profiles").
 		Join("profile_biographies USING (profile_id)").
-		Where(sq.Eq{"profile_id": id}).
-		PlaceholderFormat(sq.Dollar).
+		Where(squirrel.Eq{"profile_id": id}).
+		PlaceholderFormat(squirrel.Dollar).
 		MustSql()
 
 	if err := r.db.GetContext(ctx, pwb, query, args...); err != nil {
@@ -52,4 +51,25 @@ func (r *ProfileRepository) SetAvatar(ctx context.Context, profileID int64, avat
 		MustSql()
 
 	return r.db.QueryRowContext(ctx, sql, args...).Scan(&profileID)
+}
+
+func (r *ProfileRepository) GetByUsername(ctx context.Context, username string) (*model.Profile, error) {
+	pwb := new(struct {
+		model.Profile
+		model.Biography
+	})
+
+	query, args := squirrel.Select("*").
+		From("profiles").
+		Join("profile_biographies USING (profile_id)").
+		Where(squirrel.Eq{"username": username}).
+		PlaceholderFormat(squirrel.Dollar).
+		MustSql()
+
+	if err := r.db.GetContext(ctx, pwb, query, args...); err != nil {
+		return nil, err
+	}
+
+	pwb.Profile.Biography = pwb.Biography
+	return &pwb.Profile, nil
 }

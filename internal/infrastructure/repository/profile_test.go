@@ -107,6 +107,46 @@ func TestProfileRepository_GetById(t *testing.T) {
 	}
 }
 
+func TestProfileRepository_GetByUsername(t *testing.T) {
+	db := getTestingDB(t)
+	defer db.Close()
+
+	r := repository.NewProfileRepository(db)
+	br := repository.NewBiographyRepository(db)
+
+	profile := testingProfile()
+	r.Create(context.Background(), profile)
+
+	biography := testingBiography()
+	biography.ProfileID = profile.ID
+	br.Create(context.Background(), biography)
+
+	testCases := []struct {
+		desc     string
+		username string
+		valid    bool
+	}{
+		{"profile exists", profile.Username, true},
+		{"profile not found", "", false},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.desc, func(t *testing.T) {
+			// query
+			profile, err := r.GetByUsername(context.Background(), tc.username)
+			// check result
+			switch tc.valid {
+			case true:
+				assert.NoError(t, err)
+				assert.NotNil(t, profile)
+				assert.NotZero(t, profile.Biography)
+			case false:
+				assert.Error(t, err)
+			}
+		})
+	}
+}
+
 func TestProfileRepository_SetAvatar(t *testing.T) {
 	db := getTestingDB(t)
 	defer db.Close()

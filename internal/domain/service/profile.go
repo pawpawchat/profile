@@ -7,8 +7,9 @@ import (
 )
 
 type ProfileRepository interface {
-	Create(ctx context.Context, profile *model.Profile) error
-	GetById(ctx context.Context, id int64) (*model.Profile, error)
+	Create(context.Context, *model.Profile) error
+	GetById(context.Context, int64) (*model.Profile, error)
+	GetByUsername(context.Context, string) (*model.Profile, error)
 }
 
 type AvatarRepository interface {

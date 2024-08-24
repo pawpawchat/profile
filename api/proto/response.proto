@@ -3,10 +3,14 @@ option go_package = "api/pb";
 
 import "model.proto";
 
-message CreateResponse {
+message CreateProfileResponse {
     Profile profile = 1; 
 }
 
-message GetByIdResponse {
+message GetProfileByIdResponse {
+    Profile profile = 1; 
+}  
+
+message GetProfileByUsernameResponse {
     Profile profile = 1; 
 }  
