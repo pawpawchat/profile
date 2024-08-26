@@ -1,11 +1,23 @@
 environment:
+  
   stage:
-    grpc_server_addr: profile:9400
+  
+    grpc_server_addr: profile:9402
+  
     log_level: error
+  
+  
   development:
-    grpc_server_addr: localhost:9400
+  
+    grpc_server_addr: localhost:9402
+  
     log_level: debug
+  
+  
   testing:
-    grpc_server_addr: localhost:9400
+    
+    grpc_server_addr: localhost:9402
+    
     log_level: debug
+    
     database_url: ${DB_TEST_URL}

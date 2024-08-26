@@ -3,14 +3,31 @@ option go_package = "api/pb";
 
 import "model.proto";
 
+
+
 message CreateProfileResponse {
     Profile profile = 1; 
 }
 
-message GetProfileByIdResponse {
+
+message GetProfileResponse {
     Profile profile = 1; 
+    repeated Avatar avatars = 2;
+    Avatar selected_avatar = 3;
 }  
 
-message GetProfileByUsernameResponse {
-    Profile profile = 1; 
-}  
+
+message DeleteProfileResponse {
+    //only error
+}
+
+
+
+message SetProfileAvatarResponse {
+    Avatar avatar = 1;
+}
+
+
+message DeleteProfileAvatarResponse {
+    // only error 
+}

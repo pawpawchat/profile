@@ -1,28 +1,27 @@
-CREATE TABLE profile_avatars (
-    avatar_id BIGSERIAL PRIMARY KEY,
-    orig_url VARCHAR(128) NOT NULL,
-    added_at TIMESTAMP NOT NULL DEFAULT NOW()
-);
-
 CREATE TABLE profiles (
     profile_id        BIGSERIAL PRIMARY KEY,
     username          VARCHAR(16) NOT NULL,
-    avatar_id         BIGINT,
     description       VARCHAR(64) NOT NULL DEFAULT '',
     number_of_friends INT NOT NULL DEFAULT 0,
     online            BOOLEAN NOT NULL DEFAULT false,
     last_seen         TIMESTAMP NOT NULL DEFAULT NOW(),
-    created_at        TIMESTAMP NOT NULL DEFAULT NOW(),
+    created_at        TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
-    FOREIGN KEY (avatar_id) 
-    REFERENCES profile_avatars(avatar_id) 
-    ON DELETE SET NULL
+
+CREATE TABLE profile_avatars (
+    avatar_id BIGSERIAL PRIMARY KEY,
+    profile_id BIGINT NOT NULL,
+    orig_url VARCHAR(128) NOT NULL,
+    added_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    is_selected BOOLEAN NOT NULL DEFAULT false,
+    FOREIGN KEY (profile_id) REFERENCES profiles(profile_id) 
 );
 
 
 CREATE TABLE  profile_biographies (
     biography_id BIGSERIAL PRIMARY KEY,
-    profile_id   BIGINT NOT NULL,
+    profile_id   BIGINT  UNIQUE NOT NULL,
     first_name   VARCHAR(16) NOT NULL,
     second_name  VARCHAR(16) NOT NULL,
     birthday     TIMESTAMP,

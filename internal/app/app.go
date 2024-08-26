@@ -8,36 +8,32 @@ import (
 	"sync"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
-
 	"github.com/jmoiron/sqlx"
 	"github.com/pawpawchat/profile/api/pb"
 	"github.com/pawpawchat/profile/config"
-	"github.com/pawpawchat/profile/internal/domain/service"
+	"github.com/pawpawchat/profile/internal/app/server"
+	"github.com/pawpawchat/profile/internal/domain/service/avatar"
+	"github.com/pawpawchat/profile/internal/domain/service/profile"
 	"github.com/pawpawchat/profile/internal/infrastructure/repository"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
-func Run(ctx context.Context, config *config.Config) error {
-	// листенер для сервера сервиса profile
-	l, err := net.Listen("tcp", config.Env().GRPC_SERVER_ADDR)
+func Run(ctx context.Context, env config.Environment) error {
+	l, err := net.Listen("tcp", env.GRPC_SERVER_ADDR)
 	if err != nil {
 		return err
 	}
-
 	var wg sync.WaitGroup
-	grpcServer := newGRPCServer(config)
+	grpcServer := newGRPCServer(env)
 
-	// запускаем сервер
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		slog.Debug("grpc server is up and running", "addr", config.Env().GRPC_SERVER_ADDR)
+		slog.Debug("grpc server is up and running", "addr", env.GRPC_SERVER_ADDR)
 		err = grpcServer.Serve(l)
 	}()
 
-	// запускаем горутину, которая ждет завершения контекста
-	// и изящно останавливает запущенный сервер
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -50,8 +46,23 @@ func Run(ctx context.Context, config *config.Config) error {
 	return err
 }
 
-func newGRPCServer(config *config.Config) *grpc.Server {
-	db, err := sqlx.Connect("pgx", config.Env().DB_URL)
+func newGRPCServer(env config.Environment) *grpc.Server {
+	pr, br, ar := createRepositoriesWithOneConn(env.DB_URL)
+
+	ps := profile.NewProfileService(pr, br)
+	as := avatar.NewAvatarService(ar)
+
+	profileServer := server.NewProfileGRPCServer(ps, as)
+
+	grpcServer := grpc.NewServer()
+	reflection.Register(grpcServer)
+
+	pb.RegisterProfileServiceServer(grpcServer, profileServer)
+	return grpcServer
+}
+
+func createRepositoriesWithOneConn(url string) (*repository.ProfileRepository, *repository.BiographyRepository, *repository.AvatarRepository) {
+	db, err := sqlx.Connect("pgx", url)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -60,12 +71,5 @@ func newGRPCServer(config *config.Config) *grpc.Server {
 	br := repository.NewBiographyRepository(db)
 	ar := repository.NewAvatarsRepository(db)
 
-	ps := service.NewProfileService(pr, br, ar)
-	profileServer := newProfileGRPCServer(ps)
-
-	grpcServer := grpc.NewServer()
-	reflection.Register(grpcServer)
-
-	pb.RegisterProfileServiceServer(grpcServer, profileServer)
-	return grpcServer
+	return pr, br, ar
 }
