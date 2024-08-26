@@ -3,16 +3,18 @@ option go_package = "api/pb";
 
 import "google/protobuf/timestamp.proto";
 
+
 message Profile {
     int64 id = 1;
     string username = 2;
     string description = 3;
-    int32 number_of_friends = 4;
+    int32 num_friends = 4;
     bool online = 5;
     google.protobuf.Timestamp last_seen = 6;
     google.protobuf.Timestamp created_at = 7;
     Biography biography = 8;
 }
+
 
 message Biography {
     string first_name = 1;
@@ -20,3 +22,9 @@ message Biography {
     google.protobuf.Timestamp birthday = 3;
 }
 
+
+message Avatar {
+    int64 avatar_id = 1;
+    string orig_url = 2;
+    google.protobuf.Timestamp added_at = 3;
+}

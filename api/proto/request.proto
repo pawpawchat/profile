@@ -1,15 +1,38 @@
 syntax = "proto3";
 option go_package = "api/pb";
 
+import "google/protobuf/timestamp.proto";
+
+
+
 message CreateProfileRequest {
     string first_name = 1;
     string second_name = 2;
 }
 
-message GetProfileByIdRequest {
-    int64 id = 1;  
+
+message GetProfileRequest {
+    oneof search_by {
+        int64 id = 1;
+        string username = 2;
+    }
 }
 
-message GetProfileByUsernameRequest {
-    string username = 1;  
+
+message DeleteProfileRequest {
+    int64 profile_id = 1;
+}
+
+
+
+message SetProfileAvatarRequest {
+    int64 profile_id = 1;
+    string orig_url = 2;
+    google.protobuf.Timestamp added_at = 3;
+}
+
+
+message DeleteProfileAvatarRequest {
+    int64 profile_id = 1;
+    int64 avatar_id = 2;
 }

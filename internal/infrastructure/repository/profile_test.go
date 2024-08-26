@@ -3,6 +3,7 @@ package repository_test
 import (
 	"context"
 	"flag"
+	"fmt"
 	"testing"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
@@ -67,7 +68,7 @@ func TestProfileRepository_CreateProfile(t *testing.T) {
 	}
 }
 
-func TestProfileRepository_GetById(t *testing.T) {
+func TestProfileRepository_GetByID(t *testing.T) {
 	db := getTestingDB(t)
 	defer db.Close()
 
@@ -93,7 +94,7 @@ func TestProfileRepository_GetById(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
 			// query
-			profile, err := r.GetById(context.Background(), tc.id)
+			profile, err := r.GetByID(context.Background(), tc.id)
 			// check result
 			switch tc.valid {
 			case true:
@@ -134,43 +135,13 @@ func TestProfileRepository_GetByUsername(t *testing.T) {
 		t.Run(tc.desc, func(t *testing.T) {
 			// query
 			profile, err := r.GetByUsername(context.Background(), tc.username)
+			fmt.Println(profile)
 			// check result
 			switch tc.valid {
 			case true:
 				assert.NoError(t, err)
 				assert.NotNil(t, profile)
-				assert.NotZero(t, profile.Biography)
-			case false:
-				assert.Error(t, err)
-			}
-		})
-	}
-}
-
-func TestProfileRepository_SetAvatar(t *testing.T) {
-	db := getTestingDB(t)
-	defer db.Close()
-
-	r := repository.NewProfileRepository(db)
-
-	testCases := []struct {
-		desc      string
-		profileID int64
-		avatarID  int64
-		valid     bool
-	}{
-		{"avatar exists", 1, 1, true},
-		{"profile not found", 0, 1, false},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.desc, func(t *testing.T) {
-			// query
-			err := r.SetAvatar(context.Background(), tc.profileID, tc.avatarID)
-			// check result
-			switch tc.valid {
-			case true:
-				assert.NoError(t, err)
+				assert.NotEmpty(t, profile.Biography)
 			case false:
 				assert.Error(t, err)
 			}

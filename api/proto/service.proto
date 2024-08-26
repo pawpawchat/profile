@@ -1,0 +1,25 @@
+syntax = "proto3";
+option go_package = "api/pb";
+
+import "request.proto";
+import "response.proto";
+
+
+service ProfileService {
+    // Create a new profile.
+    rpc CreateProfile(CreateProfileRequest) returns (CreateProfileResponse);
+
+    // Get a profile by its ID.
+    rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+
+    // Delete a profile by its ID.
+    rpc DeleteProfile(DeleteProfileRequest) returns (DeleteProfileResponse);
+
+
+    // Set a profile's avatar.
+    rpc SetProfileAvatar(SetProfileAvatarRequest) returns (SetProfileAvatarResponse);
+
+    // Delete a profile's avatar by ID.
+    rpc DeleteProfileAvatar(DeleteProfileAvatarRequest) returns (DeleteProfileAvatarResponse);
+}
+

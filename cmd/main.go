@@ -39,7 +39,7 @@ func main() {
 	}()
 
 	// run the application
-	err = app.Run(ctx, cfg)
+	err = app.Run(ctx, *cfg.Env())
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "app was terminated with an error: %s", err.Error())

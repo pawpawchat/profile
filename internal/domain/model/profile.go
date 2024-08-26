@@ -6,7 +6,6 @@ type Profile struct {
 	ID          int64     `db:"profile_id"`
 	Username    string    `db:"username"`
 	Description string    `db:"description"`
-	AvatarID    *int64    `db:"avatar_id"`
 	NumFriends  int32     `db:"number_of_friends"`
 	Online      bool      `db:"online"`
 	LastSeen    time.Time `db:"last_seen"`
@@ -23,7 +22,9 @@ type Biography struct {
 }
 
 type Avatar struct {
-	ID      int64
-	OrigURL string
-	AddedAt time.Time
+	ID         int64     `db:"avatar_id"`
+	ProfileID  int64     `db:"profile_id"`
+	IsSelected bool      `db:"is_selected"`
+	OrigURL    string    `db:"orig_url"`
+	AddedAt    time.Time `db:"added_at"`
 }
