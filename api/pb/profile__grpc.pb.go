@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.21.12
-// source: service.proto
+// source: profile_.proto
 
 package pb
 
@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ProfileService_CreateProfile_FullMethodName       = "/ProfileService/CreateProfile"
-	ProfileService_GetProfile_FullMethodName          = "/ProfileService/GetProfile"
-	ProfileService_DeleteProfile_FullMethodName       = "/ProfileService/DeleteProfile"
-	ProfileService_SetProfileAvatar_FullMethodName    = "/ProfileService/SetProfileAvatar"
-	ProfileService_DeleteProfileAvatar_FullMethodName = "/ProfileService/DeleteProfileAvatar"
+	ProfileService_CreateProfile_FullMethodName       = "/profilepb.ProfileService/CreateProfile"
+	ProfileService_GetProfile_FullMethodName          = "/profilepb.ProfileService/GetProfile"
+	ProfileService_DeleteProfile_FullMethodName       = "/profilepb.ProfileService/DeleteProfile"
+	ProfileService_AddProfileAvatar_FullMethodName    = "/profilepb.ProfileService/AddProfileAvatar"
+	ProfileService_DeleteProfileAvatar_FullMethodName = "/profilepb.ProfileService/DeleteProfileAvatar"
 )
 
 // ProfileServiceClient is the client API for ProfileService service.
@@ -37,7 +37,7 @@ type ProfileServiceClient interface {
 	// Delete a profile by its ID.
 	DeleteProfile(ctx context.Context, in *DeleteProfileRequest, opts ...grpc.CallOption) (*DeleteProfileResponse, error)
 	// Set a profile's avatar.
-	SetProfileAvatar(ctx context.Context, in *SetProfileAvatarRequest, opts ...grpc.CallOption) (*SetProfileAvatarResponse, error)
+	AddProfileAvatar(ctx context.Context, in *AddProfileAvatarRequest, opts ...grpc.CallOption) (*AddProfileAvatarResponse, error)
 	// Delete a profile's avatar by ID.
 	DeleteProfileAvatar(ctx context.Context, in *DeleteProfileAvatarRequest, opts ...grpc.CallOption) (*DeleteProfileAvatarResponse, error)
 }
@@ -80,10 +80,10 @@ func (c *profileServiceClient) DeleteProfile(ctx context.Context, in *DeleteProf
 	return out, nil
 }
 
-func (c *profileServiceClient) SetProfileAvatar(ctx context.Context, in *SetProfileAvatarRequest, opts ...grpc.CallOption) (*SetProfileAvatarResponse, error) {
+func (c *profileServiceClient) AddProfileAvatar(ctx context.Context, in *AddProfileAvatarRequest, opts ...grpc.CallOption) (*AddProfileAvatarResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SetProfileAvatarResponse)
-	err := c.cc.Invoke(ctx, ProfileService_SetProfileAvatar_FullMethodName, in, out, cOpts...)
+	out := new(AddProfileAvatarResponse)
+	err := c.cc.Invoke(ctx, ProfileService_AddProfileAvatar_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +111,7 @@ type ProfileServiceServer interface {
 	// Delete a profile by its ID.
 	DeleteProfile(context.Context, *DeleteProfileRequest) (*DeleteProfileResponse, error)
 	// Set a profile's avatar.
-	SetProfileAvatar(context.Context, *SetProfileAvatarRequest) (*SetProfileAvatarResponse, error)
+	AddProfileAvatar(context.Context, *AddProfileAvatarRequest) (*AddProfileAvatarResponse, error)
 	// Delete a profile's avatar by ID.
 	DeleteProfileAvatar(context.Context, *DeleteProfileAvatarRequest) (*DeleteProfileAvatarResponse, error)
 	mustEmbedUnimplementedProfileServiceServer()
@@ -133,8 +133,8 @@ func (UnimplementedProfileServiceServer) GetProfile(context.Context, *GetProfile
 func (UnimplementedProfileServiceServer) DeleteProfile(context.Context, *DeleteProfileRequest) (*DeleteProfileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteProfile not implemented")
 }
-func (UnimplementedProfileServiceServer) SetProfileAvatar(context.Context, *SetProfileAvatarRequest) (*SetProfileAvatarResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetProfileAvatar not implemented")
+func (UnimplementedProfileServiceServer) AddProfileAvatar(context.Context, *AddProfileAvatarRequest) (*AddProfileAvatarResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddProfileAvatar not implemented")
 }
 func (UnimplementedProfileServiceServer) DeleteProfileAvatar(context.Context, *DeleteProfileAvatarRequest) (*DeleteProfileAvatarResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteProfileAvatar not implemented")
@@ -214,20 +214,20 @@ func _ProfileService_DeleteProfile_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ProfileService_SetProfileAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetProfileAvatarRequest)
+func _ProfileService_AddProfileAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddProfileAvatarRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProfileServiceServer).SetProfileAvatar(ctx, in)
+		return srv.(ProfileServiceServer).AddProfileAvatar(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ProfileService_SetProfileAvatar_FullMethodName,
+		FullMethod: ProfileService_AddProfileAvatar_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProfileServiceServer).SetProfileAvatar(ctx, req.(*SetProfileAvatarRequest))
+		return srv.(ProfileServiceServer).AddProfileAvatar(ctx, req.(*AddProfileAvatarRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -254,7 +254,7 @@ func _ProfileService_DeleteProfileAvatar_Handler(srv interface{}, ctx context.Co
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ProfileService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "ProfileService",
+	ServiceName: "profilepb.ProfileService",
 	HandlerType: (*ProfileServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -270,8 +270,8 @@ var ProfileService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ProfileService_DeleteProfile_Handler,
 		},
 		{
-			MethodName: "SetProfileAvatar",
-			Handler:    _ProfileService_SetProfileAvatar_Handler,
+			MethodName: "AddProfileAvatar",
+			Handler:    _ProfileService_AddProfileAvatar_Handler,
 		},
 		{
 			MethodName: "DeleteProfileAvatar",
@@ -279,5 +279,5 @@ var ProfileService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "service.proto",
+	Metadata: "profile_.proto",
 }

@@ -11,5 +11,6 @@ type ProfileDeletter interface {
 }
 
 func DeleteProfileAdapter(ctx context.Context, req *pb.DeleteProfileRequest, pc ProfileDeletter) (*pb.DeleteProfileResponse, error) {
+
 	return nil, nil
 }

@@ -21,7 +21,7 @@ type AvatarGetter interface {
 }
 
 func GetProfileAdapter(ctx context.Context, req *pb.GetProfileRequest, pg ProfileGetter, ag AvatarGetter) (*pb.GetProfileResponse, error) {
-	if emptyFields := validation.GetZeroFields(req); len(emptyFields) != 0 {
+	if emptyFields := validation.GetEmptyFields(req); len(emptyFields) != 0 {
 		return nil, status.MissingFields(emptyFields)
 	}
 

@@ -8,23 +8,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// type StatusBuilder struct {
-// 	st *status.Status
-// }
-
-// func New() *StatusBuilder {
-// 	return &StatusBuilder{
-// 		st: &status.Status{
-
-// 		}
-// 	}
-// }
-
-// func (b *StatusBuilder) Code(code codes.Code) *StatusBuilder {
-// 	status.New(code, "invalid argument").WithDetails()
-// 	return b
-// }
-
 func MissingFields(fields []string) error {
 	badRequest := new(errdetails.BadRequest)
 
@@ -36,7 +19,6 @@ func MissingFields(fields []string) error {
 
 		badRequest.FieldViolations = append(badRequest.FieldViolations, violation)
 	}
-
 	status, _ := status.New(codes.InvalidArgument, "missing required fields").WithDetails(badRequest)
 	return status.Err()
 }
@@ -50,7 +32,6 @@ func NotFound(msg string, keyDesc string, keyVal interface{}) error {
 		Field:       keyDesc,
 		Description: fmt.Sprintf("%v", keyVal),
 	}
-
 	status, _ := status.New(codes.NotFound, msg).WithDetails(searchedBy)
 	return status.Err()
 }
