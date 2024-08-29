@@ -11,19 +11,21 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/pawpawchat/profile/api/pb"
 	"github.com/pawpawchat/profile/config"
-	"github.com/pawpawchat/profile/internal/app/server"
+	"github.com/pawpawchat/profile/internal/app/grpc/server"
 	"github.com/pawpawchat/profile/internal/domain/service/avatar"
 	"github.com/pawpawchat/profile/internal/domain/service/profile"
 	"github.com/pawpawchat/profile/internal/infrastructure/repository"
+	"github.com/pawpawchat/profile/pkg/interceptor"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
-func Run(ctx context.Context, env config.Environment) error {
+func Run(ctx context.Context, env config.Environment) {
 	l, err := net.Listen("tcp", env.GRPC_SERVER_ADDR)
 	if err != nil {
-		return err
+		log.Fatal(err)
 	}
+
 	var wg sync.WaitGroup
 	grpcServer := newGRPCServer(env)
 
@@ -31,7 +33,9 @@ func Run(ctx context.Context, env config.Environment) error {
 	go func() {
 		defer wg.Done()
 		slog.Debug("grpc server is up and running", "addr", env.GRPC_SERVER_ADDR)
-		err = grpcServer.Serve(l)
+		if err := grpcServer.Serve(l); err != nil {
+			log.Fatal(err)
+		}
 	}()
 
 	wg.Add(1)
@@ -43,7 +47,6 @@ func Run(ctx context.Context, env config.Environment) error {
 	}()
 
 	wg.Wait()
-	return err
 }
 
 func newGRPCServer(env config.Environment) *grpc.Server {
@@ -54,7 +57,7 @@ func newGRPCServer(env config.Environment) *grpc.Server {
 
 	profileServer := server.NewProfileGRPCServer(ps, as)
 
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(interceptor.UnaryInterceptor))
 	reflection.Register(grpcServer)
 
 	pb.RegisterProfileServiceServer(grpcServer, profileServer)

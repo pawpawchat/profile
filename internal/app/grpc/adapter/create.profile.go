@@ -16,7 +16,7 @@ type ProfileCreator interface {
 }
 
 func CreateProfileAdapter(ctx context.Context, req *pb.CreateProfileRequest, pc ProfileCreator) (*pb.CreateProfileResponse, error) {
-	if emptyFields := validation.GetZeroFields(req); len(emptyFields) != 0 {
+	if emptyFields := validation.GetEmptyFields(req); len(emptyFields) != 0 {
 		return nil, status.MissingFields(emptyFields)
 	}
 

@@ -10,8 +10,8 @@ import (
 	"github.com/pawpawchat/profile/pkg/status"
 )
 
-func (s *AvatarService) SetProfileAvatar(ctx context.Context, avatar *model.Avatar) error {
-	const fn = "SetProfileAvatar"
+func (s *AvatarService) AddProfileAvatar(ctx context.Context, avatar *model.Avatar) error {
+	const fn = "AddProfileAvatar"
 	if err := s.avatarRepository.Create(ctx, avatar); err != nil {
 		return handleError(err, fn, avatar.ProfileID)
 	}

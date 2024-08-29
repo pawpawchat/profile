@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/pawpawchat/profile/api/pb"
-	"github.com/pawpawchat/profile/internal/app/adapter"
+	"github.com/pawpawchat/profile/internal/app/grpc/adapter"
 	"github.com/pawpawchat/profile/internal/domain/model"
 )
 
@@ -16,7 +16,7 @@ type ProfileService interface {
 }
 
 type AvatarService interface {
-	SetProfileAvatar(context.Context, *model.Avatar) error
+	AddProfileAvatar(context.Context, *model.Avatar) error
 	GetAllProfileAvatars(context.Context, int64) ([]*model.Avatar, error)
 	DeleteProfileAvatar(context.Context, *model.Avatar) error
 }
@@ -43,8 +43,8 @@ func (s *ProfileGRPCServer) GetProfile(ctx context.Context, req *pb.GetProfileRe
 	return adapter.GetProfileAdapter(ctx, req, s.profileService, s.avatarService)
 }
 
-func (s *ProfileGRPCServer) SetProfileAvatar(ctx context.Context, req *pb.SetProfileAvatarRequest) (*pb.SetProfileAvatarResponse, error) {
-	return adapter.SetProfileAvatar(ctx, req, s.avatarService)
+func (s *ProfileGRPCServer) AddProfileAvatar(ctx context.Context, req *pb.AddProfileAvatarRequest) (*pb.AddProfileAvatarResponse, error) {
+	return adapter.AddProfileAvatar(ctx, req, s.avatarService)
 }
 
 func (s *ProfileGRPCServer) DeleteProfileAvatar(ctx context.Context, req *pb.DeleteProfileAvatarRequest) (*pb.DeleteProfileAvatarResponse, error) {
