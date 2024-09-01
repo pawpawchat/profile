@@ -10,7 +10,7 @@ import (
 	"github.com/pawpawchat/profile/pkg/status"
 )
 
-func (s *AvatarService) GetAllProfileAvatars(ctx context.Context, profileID int64) ([]*model.Avatar, error) {
+func (s *AvatarService) GetAllProfileAvatars(ctx context.Context, profileID int64) (model.Avatars, error) {
 	const fn = "GetAllProfileAvatars"
 
 	avatars, err := s.avatarRepository.GetProfileAvatars(ctx, profileID)

@@ -88,7 +88,6 @@ func FindDefaultConfigFiles() (*os.File, error) {
 
 	var configFile *os.File
 	for range 5 {
-		fmt.Println(wd)
 		configFile, err = os.Open(filepath.Join(wd, "config.yaml"))
 		if err != nil {
 			wd = filepath.Join(wd, "..")

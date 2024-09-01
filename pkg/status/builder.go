@@ -37,9 +37,13 @@ func NotFound(msg string, keyDesc string, keyVal interface{}) error {
 }
 
 func Internal(msg string) error {
-	return status.New(codes.Internal, msg).Err()
+	return status.Error(codes.Internal, msg)
 }
 
 func Unexpected(msg string) error {
-	return status.New(codes.Unknown, msg).Err()
+	return status.Error(codes.Unknown, msg)
+}
+
+func New(code codes.Code, msg string) error {
+	return status.Error(code, msg)
 }
