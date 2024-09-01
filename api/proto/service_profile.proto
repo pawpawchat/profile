@@ -2,8 +2,8 @@ syntax = "proto3";
 package profilepb;
 option go_package = "api/pb";
 
-import "profile_request.proto";
-import "profile_response.proto";
+import "request_profile.proto";
+import "response_profile.proto";
 
 
 service ProfileService {
@@ -16,6 +16,9 @@ service ProfileService {
     // Delete a profile by its ID.
     rpc DeleteProfile(DeleteProfileRequest) returns (DeleteProfileResponse);
 
+    // Update a profile informtation by its ID.
+    // Updating only received fields.
+    rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse);
 
     // Set a profile's avatar.
     rpc AddProfileAvatar(AddProfileAvatarRequest) returns (AddProfileAvatarResponse);

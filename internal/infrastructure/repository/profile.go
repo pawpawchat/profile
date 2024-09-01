@@ -66,3 +66,22 @@ func (r *ProfileRepository) GetByUsername(ctx context.Context, username string) 
 	pwb.Profile.Biography = pwb.Biography
 	return &pwb.Profile, nil
 }
+
+func (r *ProfileRepository) UpdateProfileData(ctx context.Context, data *model.UpdateProfileData) error {
+	query := squirrel.Update("profiles").
+		Where(squirrel.Eq{"profile_id": data.ID}).
+		Suffix("RETURNING profile_id").
+		PlaceholderFormat(squirrel.Dollar)
+
+	if data.Description != "" {
+		query = query.Set("description", data.Description)
+	}
+
+	if data.Username != "" {
+		query = query.Set("username", data.Username)
+	}
+
+	sql, args := query.MustSql()
+
+	return r.db.QueryRowContext(ctx, sql, args...).Scan(&data.ID)
+}

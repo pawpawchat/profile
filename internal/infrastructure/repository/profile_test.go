@@ -135,7 +135,6 @@ func TestProfileRepository_GetByUsername(t *testing.T) {
 		t.Run(tc.desc, func(t *testing.T) {
 			// query
 			profile, err := r.GetByUsername(context.Background(), tc.username)
-			fmt.Println(profile)
 			// check result
 			switch tc.valid {
 			case true:
@@ -147,4 +146,13 @@ func TestProfileRepository_GetByUsername(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestProfileRepository_UpdateData(t *testing.T) {
+	db := getTestingDB(t)
+	defer db.Close()
+
+	r := repository.NewProfileRepository(db)
+
+	fmt.Println(r.UpdateProfileData(context.Background(), &model.UpdateProfileData{ID: -1, Username: "s"}))
 }

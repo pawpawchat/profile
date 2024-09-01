@@ -58,9 +58,10 @@ func newGRPCServer(env config.Environment) *grpc.Server {
 	profileServer := server.NewProfileGRPCServer(ps, as)
 
 	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(interceptor.UnaryInterceptor))
-	reflection.Register(grpcServer)
 
 	pb.RegisterProfileServiceServer(grpcServer, profileServer)
+
+	reflection.Register(grpcServer)
 	return grpcServer
 }
 

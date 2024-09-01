@@ -7,10 +7,10 @@ import (
 	"github.com/pawpawchat/profile/internal/domain/model"
 )
 
-type ProfileAvatarDeletter interface {
+type profileAvatarDeletter interface {
 	DeleteProfileAvatar(context.Context, *model.Avatar) error
 }
 
-func DeleteProfileAvatarAdapter(ctx context.Context, req *pb.DeleteProfileAvatarRequest, pad ProfileAvatarDeletter) (*pb.DeleteProfileAvatarResponse, error) {
+func DeleteProfileAvatarAdapter(ctx context.Context, req *pb.DeleteProfileAvatarRequest, pad profileAvatarDeletter) (*pb.DeleteProfileAvatarResponse, error) {
 	return nil, nil
 }

@@ -11,13 +11,16 @@ import (
 type ProfileService interface {
 	CreateProfile(context.Context, *model.Profile) error
 	DeleteProfile(context.Context, int64) error
+
 	GetProfileByID(context.Context, int64) (*model.Profile, error)
 	GetProfileByUsername(context.Context, string) (*model.Profile, error)
+
+	UpdateProfile(context.Context, *model.UpdateProfileData) error
 }
 
 type AvatarService interface {
 	AddProfileAvatar(context.Context, *model.Avatar) error
-	GetAllProfileAvatars(context.Context, int64) ([]*model.Avatar, error)
+	GetAllProfileAvatars(context.Context, int64) (model.Avatars, error)
 	DeleteProfileAvatar(context.Context, *model.Avatar) error
 }
 
@@ -41,6 +44,10 @@ func (s *ProfileGRPCServer) DeleteProfile(ctx context.Context, req *pb.DeletePro
 
 func (s *ProfileGRPCServer) GetProfile(ctx context.Context, req *pb.GetProfileRequest) (*pb.GetProfileResponse, error) {
 	return adapter.GetProfileAdapter(ctx, req, s.profileService, s.avatarService)
+}
+
+func (s *ProfileGRPCServer) UpdateProfile(ctx context.Context, req *pb.UpdateProfileRequest) (*pb.UpdateProfileResponse, error) {
+	return adapter.UpdateProfileAdapter(ctx, s.profileService, req)
 }
 
 func (s *ProfileGRPCServer) AddProfileAvatar(ctx context.Context, req *pb.AddProfileAvatarRequest) (*pb.AddProfileAvatarResponse, error) {

@@ -16,7 +16,7 @@ func UnaryInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, 
 		st := status.Convert(err)
 		slog.With("error", st.Message()).Error("")
 	} else {
-		slog.Debug("success")
+		slog.Debug("success") //, "data", fmt.Sprintf("%+v", resp))
 	}
 
 	return resp, err

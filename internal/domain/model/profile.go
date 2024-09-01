@@ -13,6 +13,13 @@ type Profile struct {
 	Biography   Biography `db:"biography"`
 }
 
+type UpdateProfileData struct {
+	ID          int64      `db:"profile_id"`
+	Username    string     `db:"username"`
+	Description string     `db:"description"`
+	Biography   *Biography `db:"biography"`
+}
+
 type Biography struct {
 	ID         int64      `db:"biography_id"`
 	FirstName  string     `db:"first_name"`
@@ -28,3 +35,5 @@ type Avatar struct {
 	OrigURL    string    `db:"orig_url"`
 	AddedAt    time.Time `db:"added_at"`
 }
+
+type Avatars []*Avatar

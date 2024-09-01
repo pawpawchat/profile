@@ -10,10 +10,12 @@ type ProfileRepository interface {
 	Create(context.Context, *model.Profile) error
 	GetByID(context.Context, int64) (*model.Profile, error)
 	GetByUsername(context.Context, string) (*model.Profile, error)
+	UpdateProfileData(context.Context, *model.UpdateProfileData) error
 }
 
 type BiographyRepository interface {
 	Create(context.Context, *model.Biography) error
+	UpdateProfileBiography(context.Context, *model.UpdateProfileData) error
 }
 
 // Service has access to repositories and APIs of other services
