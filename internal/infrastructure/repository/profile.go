@@ -85,3 +85,12 @@ func (r *ProfileRepository) UpdateProfileData(ctx context.Context, data *model.U
 
 	return r.db.QueryRowContext(ctx, sql, args...).Scan(&data.ID)
 }
+
+func (r *ProfileRepository) DeleteProfileById(ctx context.Context, id int64) error {
+	sql, args := squirrel.Delete("profiles").
+		Where(squirrel.Eq{"profile_id": id}).
+		Suffix("RETURNING profile_id").
+		PlaceholderFormat(squirrel.Dollar).MustSql()
+
+	return r.db.QueryRowContext(ctx, sql, args...).Scan(&id)
+}

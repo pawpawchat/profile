@@ -16,7 +16,7 @@ func (s *AvatarService) AddProfileAvatar(ctx context.Context, avatar *model.Avat
 		return handleError(err, fn, avatar.ProfileID)
 	}
 
-	if err := s.avatarRepository.SetAvatar(ctx, avatar.ProfileID, avatar.ID); err != nil {
+	if err := s.avatarRepository.Select(ctx, avatar.ProfileID, avatar.ID); err != nil {
 		return handleError(err, fn, avatar.ProfileID)
 	}
 

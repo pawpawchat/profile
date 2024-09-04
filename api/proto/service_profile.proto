@@ -23,6 +23,9 @@ service ProfileService {
     // Set a profile's avatar.
     rpc AddProfileAvatar(AddProfileAvatarRequest) returns (AddProfileAvatarResponse);
 
+    // Set a profile's avatar.
+    rpc ChangeProfileAvatar(ChangeProfileAvatarRequest) returns (ChangeProfileAvatarResponse);
+
     // Delete a profile's avatar by ID.
     rpc DeleteProfileAvatar(DeleteProfileAvatarRequest) returns (DeleteProfileAvatarResponse);
 }

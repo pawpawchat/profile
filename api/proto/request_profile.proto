@@ -5,12 +5,12 @@ option go_package = "api/pb";
 import "google/protobuf/timestamp.proto";
 import "messages_profile.proto";
 
+// Profile
 
 message CreateProfileRequest {
     string first_name = 1;
     string second_name = 2;
 }
-
 
 message GetProfileRequest {
     oneof search_by {
@@ -19,12 +19,18 @@ message GetProfileRequest {
     }
 }
 
+message UpdateProfileRequest {
+    int64 profile_id = 1;
+    string username = 2;
+    string description = 3;
+    Biography biography = 4;
+}
 
 message DeleteProfileRequest {
     int64 profile_id = 1;
 }
 
-
+// Profile avatar
 
 message AddProfileAvatarRequest {
     int64 profile_id = 1;
@@ -32,17 +38,14 @@ message AddProfileAvatarRequest {
     google.protobuf.Timestamp added_at = 3;
 }
 
-
 message DeleteProfileAvatarRequest {
     int64 profile_id = 1;
     int64 avatar_id = 2;
 }
 
-
-
-message UpdateProfileRequest {
+message ChangeProfileAvatarRequest {
     int64 profile_id = 1;
-    string username = 2;
-    string description = 3;
-    Biography biography = 4;
+    int64 avatar_id = 2;
 }
+
+

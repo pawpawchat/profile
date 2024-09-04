@@ -122,6 +122,44 @@ func (x *GetProfileResponse) GetAvatars() []*Avatar {
 	return nil
 }
 
+type UpdateProfileResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *UpdateProfileResponse) Reset() {
+	*x = UpdateProfileResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_response_profile_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateProfileResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateProfileResponse) ProtoMessage() {}
+
+func (x *UpdateProfileResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_response_profile_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateProfileResponse.ProtoReflect.Descriptor instead.
+func (*UpdateProfileResponse) Descriptor() ([]byte, []int) {
+	return file_response_profile_proto_rawDescGZIP(), []int{2}
+}
+
 type DeleteProfileResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -131,7 +169,7 @@ type DeleteProfileResponse struct {
 func (x *DeleteProfileResponse) Reset() {
 	*x = DeleteProfileResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_response_profile_proto_msgTypes[2]
+		mi := &file_response_profile_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -144,7 +182,7 @@ func (x *DeleteProfileResponse) String() string {
 func (*DeleteProfileResponse) ProtoMessage() {}
 
 func (x *DeleteProfileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_response_profile_proto_msgTypes[2]
+	mi := &file_response_profile_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -157,7 +195,7 @@ func (x *DeleteProfileResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteProfileResponse.ProtoReflect.Descriptor instead.
 func (*DeleteProfileResponse) Descriptor() ([]byte, []int) {
-	return file_response_profile_proto_rawDescGZIP(), []int{2}
+	return file_response_profile_proto_rawDescGZIP(), []int{3}
 }
 
 type AddProfileAvatarResponse struct {
@@ -171,7 +209,7 @@ type AddProfileAvatarResponse struct {
 func (x *AddProfileAvatarResponse) Reset() {
 	*x = AddProfileAvatarResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_response_profile_proto_msgTypes[3]
+		mi := &file_response_profile_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -184,7 +222,7 @@ func (x *AddProfileAvatarResponse) String() string {
 func (*AddProfileAvatarResponse) ProtoMessage() {}
 
 func (x *AddProfileAvatarResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_response_profile_proto_msgTypes[3]
+	mi := &file_response_profile_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -197,7 +235,7 @@ func (x *AddProfileAvatarResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddProfileAvatarResponse.ProtoReflect.Descriptor instead.
 func (*AddProfileAvatarResponse) Descriptor() ([]byte, []int) {
-	return file_response_profile_proto_rawDescGZIP(), []int{3}
+	return file_response_profile_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *AddProfileAvatarResponse) GetAvatar() *Avatar {
@@ -216,7 +254,7 @@ type DeleteProfileAvatarResponse struct {
 func (x *DeleteProfileAvatarResponse) Reset() {
 	*x = DeleteProfileAvatarResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_response_profile_proto_msgTypes[4]
+		mi := &file_response_profile_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -229,7 +267,7 @@ func (x *DeleteProfileAvatarResponse) String() string {
 func (*DeleteProfileAvatarResponse) ProtoMessage() {}
 
 func (x *DeleteProfileAvatarResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_response_profile_proto_msgTypes[4]
+	mi := &file_response_profile_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -242,32 +280,34 @@ func (x *DeleteProfileAvatarResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteProfileAvatarResponse.ProtoReflect.Descriptor instead.
 func (*DeleteProfileAvatarResponse) Descriptor() ([]byte, []int) {
-	return file_response_profile_proto_rawDescGZIP(), []int{4}
+	return file_response_profile_proto_rawDescGZIP(), []int{5}
 }
 
-type UpdateProfileResponse struct {
+type ChangeProfileAvatarResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	Avatar *Avatar `protobuf:"bytes,1,opt,name=avatar,proto3" json:"avatar,omitempty"`
 }
 
-func (x *UpdateProfileResponse) Reset() {
-	*x = UpdateProfileResponse{}
+func (x *ChangeProfileAvatarResponse) Reset() {
+	*x = ChangeProfileAvatarResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_response_profile_proto_msgTypes[5]
+		mi := &file_response_profile_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *UpdateProfileResponse) String() string {
+func (x *ChangeProfileAvatarResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateProfileResponse) ProtoMessage() {}
+func (*ChangeProfileAvatarResponse) ProtoMessage() {}
 
-func (x *UpdateProfileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_response_profile_proto_msgTypes[5]
+func (x *ChangeProfileAvatarResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_response_profile_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -278,9 +318,16 @@ func (x *UpdateProfileResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateProfileResponse.ProtoReflect.Descriptor instead.
-func (*UpdateProfileResponse) Descriptor() ([]byte, []int) {
-	return file_response_profile_proto_rawDescGZIP(), []int{5}
+// Deprecated: Use ChangeProfileAvatarResponse.ProtoReflect.Descriptor instead.
+func (*ChangeProfileAvatarResponse) Descriptor() ([]byte, []int) {
+	return file_response_profile_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ChangeProfileAvatarResponse) GetAvatar() *Avatar {
+	if x != nil {
+		return x.Avatar
+	}
+	return nil
 }
 
 var File_response_profile_proto protoreflect.FileDescriptor
@@ -301,17 +348,22 @@ var file_response_profile_proto_rawDesc = []byte{
 	0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x12, 0x2b, 0x0a, 0x07, 0x61, 0x76, 0x61, 0x74, 0x61, 0x72,
 	0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x70, 0x72, 0x6f, 0x66, 0x69, 0x6c,
 	0x65, 0x70, 0x62, 0x2e, 0x41, 0x76, 0x61, 0x74, 0x61, 0x72, 0x52, 0x07, 0x61, 0x76, 0x61, 0x74,
-	0x61, 0x72, 0x73, 0x22, 0x17, 0x0a, 0x15, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x72, 0x6f,
-	0x66, 0x69, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x45, 0x0a, 0x18,
-	0x41, 0x64, 0x64, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x41, 0x76, 0x61, 0x74, 0x61, 0x72,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x29, 0x0a, 0x06, 0x61, 0x76, 0x61, 0x74,
-	0x61, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x70, 0x72, 0x6f, 0x66, 0x69,
-	0x6c, 0x65, 0x70, 0x62, 0x2e, 0x41, 0x76, 0x61, 0x74, 0x61, 0x72, 0x52, 0x06, 0x61, 0x76, 0x61,
-	0x74, 0x61, 0x72, 0x22, 0x1d, 0x0a, 0x1b, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x72, 0x6f,
-	0x66, 0x69, 0x6c, 0x65, 0x41, 0x76, 0x61, 0x74, 0x61, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x17, 0x0a, 0x15, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x66,
-	0x69, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x08, 0x5a, 0x06, 0x61,
-	0x70, 0x69, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x61, 0x72, 0x73, 0x22, 0x17, 0x0a, 0x15, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f,
+	0x66, 0x69, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x17, 0x0a, 0x15,
+	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x45, 0x0a, 0x18, 0x41, 0x64, 0x64, 0x50, 0x72, 0x6f, 0x66,
+	0x69, 0x6c, 0x65, 0x41, 0x76, 0x61, 0x74, 0x61, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x29, 0x0a, 0x06, 0x61, 0x76, 0x61, 0x74, 0x61, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x11, 0x2e, 0x70, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x70, 0x62, 0x2e, 0x41, 0x76,
+	0x61, 0x74, 0x61, 0x72, 0x52, 0x06, 0x61, 0x76, 0x61, 0x74, 0x61, 0x72, 0x22, 0x1d, 0x0a, 0x1b,
+	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x41, 0x76, 0x61,
+	0x74, 0x61, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x48, 0x0a, 0x1b, 0x43,
+	0x68, 0x61, 0x6e, 0x67, 0x65, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x41, 0x76, 0x61, 0x74,
+	0x61, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x29, 0x0a, 0x06, 0x61, 0x76,
+	0x61, 0x74, 0x61, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x70, 0x72, 0x6f,
+	0x66, 0x69, 0x6c, 0x65, 0x70, 0x62, 0x2e, 0x41, 0x76, 0x61, 0x74, 0x61, 0x72, 0x52, 0x06, 0x61,
+	0x76, 0x61, 0x74, 0x61, 0x72, 0x42, 0x08, 0x5a, 0x06, 0x61, 0x70, 0x69, 0x2f, 0x70, 0x62, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -326,27 +378,29 @@ func file_response_profile_proto_rawDescGZIP() []byte {
 	return file_response_profile_proto_rawDescData
 }
 
-var file_response_profile_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_response_profile_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_response_profile_proto_goTypes = []interface{}{
 	(*CreateProfileResponse)(nil),       // 0: profilepb.CreateProfileResponse
 	(*GetProfileResponse)(nil),          // 1: profilepb.GetProfileResponse
-	(*DeleteProfileResponse)(nil),       // 2: profilepb.DeleteProfileResponse
-	(*AddProfileAvatarResponse)(nil),    // 3: profilepb.AddProfileAvatarResponse
-	(*DeleteProfileAvatarResponse)(nil), // 4: profilepb.DeleteProfileAvatarResponse
-	(*UpdateProfileResponse)(nil),       // 5: profilepb.UpdateProfileResponse
-	(*Profile)(nil),                     // 6: profilepb.Profile
-	(*Avatar)(nil),                      // 7: profilepb.Avatar
+	(*UpdateProfileResponse)(nil),       // 2: profilepb.UpdateProfileResponse
+	(*DeleteProfileResponse)(nil),       // 3: profilepb.DeleteProfileResponse
+	(*AddProfileAvatarResponse)(nil),    // 4: profilepb.AddProfileAvatarResponse
+	(*DeleteProfileAvatarResponse)(nil), // 5: profilepb.DeleteProfileAvatarResponse
+	(*ChangeProfileAvatarResponse)(nil), // 6: profilepb.ChangeProfileAvatarResponse
+	(*Profile)(nil),                     // 7: profilepb.Profile
+	(*Avatar)(nil),                      // 8: profilepb.Avatar
 }
 var file_response_profile_proto_depIdxs = []int32{
-	6, // 0: profilepb.CreateProfileResponse.profile:type_name -> profilepb.Profile
-	6, // 1: profilepb.GetProfileResponse.profile:type_name -> profilepb.Profile
-	7, // 2: profilepb.GetProfileResponse.avatars:type_name -> profilepb.Avatar
-	7, // 3: profilepb.AddProfileAvatarResponse.avatar:type_name -> profilepb.Avatar
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	7, // 0: profilepb.CreateProfileResponse.profile:type_name -> profilepb.Profile
+	7, // 1: profilepb.GetProfileResponse.profile:type_name -> profilepb.Profile
+	8, // 2: profilepb.GetProfileResponse.avatars:type_name -> profilepb.Avatar
+	8, // 3: profilepb.AddProfileAvatarResponse.avatar:type_name -> profilepb.Avatar
+	8, // 4: profilepb.ChangeProfileAvatarResponse.avatar:type_name -> profilepb.Avatar
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_response_profile_proto_init() }
@@ -381,7 +435,7 @@ func file_response_profile_proto_init() {
 			}
 		}
 		file_response_profile_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteProfileResponse); i {
+			switch v := v.(*UpdateProfileResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -393,7 +447,7 @@ func file_response_profile_proto_init() {
 			}
 		}
 		file_response_profile_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AddProfileAvatarResponse); i {
+			switch v := v.(*DeleteProfileResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -405,7 +459,7 @@ func file_response_profile_proto_init() {
 			}
 		}
 		file_response_profile_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteProfileAvatarResponse); i {
+			switch v := v.(*AddProfileAvatarResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -417,7 +471,19 @@ func file_response_profile_proto_init() {
 			}
 		}
 		file_response_profile_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateProfileResponse); i {
+			switch v := v.(*DeleteProfileAvatarResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_response_profile_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ChangeProfileAvatarResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -435,7 +501,7 @@ func file_response_profile_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_response_profile_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

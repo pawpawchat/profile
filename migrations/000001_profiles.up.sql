@@ -14,8 +14,8 @@ CREATE TABLE profile_avatars (
     profile_id BIGINT NOT NULL,
     orig_url VARCHAR(128) NOT NULL,
     added_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    is_selected BOOLEAN NOT NULL DEFAULT false,
-    FOREIGN KEY (profile_id) REFERENCES profiles(profile_id) 
+    is_selected BOOLEAN NOT NULL DEFAULT true,
+    FOREIGN KEY (profile_id) REFERENCES profiles(profile_id) ON DELETE CASCADE 
 );
 
 

@@ -13,7 +13,7 @@ import (
 func (s *AvatarService) GetAllProfileAvatars(ctx context.Context, profileID int64) (model.Avatars, error) {
 	const fn = "GetAllProfileAvatars"
 
-	avatars, err := s.avatarRepository.GetProfileAvatars(ctx, profileID)
+	avatars, err := s.avatarRepository.GetAll(ctx, profileID)
 	if err != nil {
 		if pgerr, ok := err.(*pgconn.PgError); ok {
 

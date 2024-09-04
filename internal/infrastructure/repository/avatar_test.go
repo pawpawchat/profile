@@ -31,7 +31,7 @@ func addTestingProfileWithAvatar(t *testing.T) (*sqlx.DB, *model.Profile, *model
 	a.ProfileID = p.ID
 	ar := repository.NewAvatarsRepository(db)
 	assert.NoError(t, ar.Create(context.Background(), a))
-	assert.NoError(t, ar.SetAvatar(context.Background(), a.ProfileID, a.ID))
+	assert.NoError(t, ar.Select(context.Background(), a.ProfileID, a.ID))
 
 	return db, p, a
 }
@@ -84,7 +84,36 @@ func TestAvatarRepository_Create(t *testing.T) {
 	}
 }
 
-func TestAvatarRepository_SetAvatar(t *testing.T) {
+func TestAvatarRepository_Unselect(t *testing.T) {
+	db, _, _ := addTestingProfileWithAvatar(t)
+	defer db.Close()
+
+	testCases := []struct {
+		desc      string
+		profileID int64
+		valid     bool
+	}{
+		{"user exists", 2, true},
+		{"profile not found", 0, false},
+	}
+
+	ar := repository.NewAvatarsRepository(db)
+
+	for _, tc := range testCases {
+		t.Run(tc.desc, func(t *testing.T) {
+			err := ar.Unselect(context.Background(), tc.profileID)
+
+			if tc.valid {
+				assert.NoError(t, err)
+
+			} else {
+				assert.Error(t, err)
+			}
+		})
+	}
+}
+
+func TestAvatarRepository_Select(t *testing.T) {
 	db, p, a := addTestingProfileWithAvatar(t)
 	defer db.Close()
 
@@ -102,7 +131,7 @@ func TestAvatarRepository_SetAvatar(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
-			err := ar.SetAvatar(context.Background(), tc.profileID, tc.avatarID)
+			err := ar.Select(context.Background(), tc.profileID, tc.avatarID)
 
 			if tc.valid {
 				assert.NoError(t, err)
@@ -114,7 +143,7 @@ func TestAvatarRepository_SetAvatar(t *testing.T) {
 	}
 }
 
-func TestAvatarRepository_GetProfileAvatars(t *testing.T) {
+func TestAvatarRepository_GetAll(t *testing.T) {
 	db, p, _ := addTestingProfileWithAvatar(t)
 	defer db.Close()
 
@@ -132,7 +161,7 @@ func TestAvatarRepository_GetProfileAvatars(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
 
-			avatars, err := ar.GetProfileAvatars(context.Background(), tc.profileID)
+			avatars, err := ar.GetAll(context.Background(), tc.profileID)
 
 			if tc.valid {
 				assert.NoError(t, err)
@@ -146,7 +175,7 @@ func TestAvatarRepository_GetProfileAvatars(t *testing.T) {
 	}
 }
 
-func TestAvatarRepository_DeleteProfileAvatar(t *testing.T) {
+func TestAvatarRepository_Delete(t *testing.T) {
 	db, p, a := addTestingProfileWithAvatar(t)
 	defer db.Close()
 
@@ -166,7 +195,7 @@ func TestAvatarRepository_DeleteProfileAvatar(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
 
-			err := ar.DeleteProfileAvatar(context.Background(), tc.profileID, tc.avatarID)
+			err := ar.Delete(context.Background(), tc.profileID, tc.avatarID)
 
 			if tc.valid {
 				assert.NoError(t, err)
@@ -178,7 +207,7 @@ func TestAvatarRepository_DeleteProfileAvatar(t *testing.T) {
 	}
 }
 
-func TestAvatarRepository_DeleteProfileAvatars(t *testing.T) {
+func TestAvatarRepository_DeleteAll(t *testing.T) {
 	db, p, _ := addTestingProfileWithAvatar(t)
 	defer db.Close()
 
@@ -196,7 +225,7 @@ func TestAvatarRepository_DeleteProfileAvatars(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
 
-			err := ar.DeleteProfileAvatars(context.Background(), tc.profileID)
+			err := ar.DeleteAll(context.Background(), tc.profileID)
 
 			if tc.valid {
 				assert.NoError(t, err)
