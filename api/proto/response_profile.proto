@@ -4,35 +4,27 @@ option go_package = "api/pb";
 
 import "messages_profile.proto";
 
-
+// Profile
 
 message CreateProfileResponse {
     Profile profile = 1; 
 }
-
 
 message GetProfileResponse {
     Profile profile = 1; 
     repeated Avatar avatars = 2;
 }  
 
+message UpdateProfileResponse {}
 
-message DeleteProfileResponse {
-    //only error
-}
+message DeleteProfileResponse {}
 
-
+// Profile Avatar
 
 message AddProfileAvatarResponse {
     Avatar avatar = 1;
 }
 
+message DeleteProfileAvatarResponse {}
 
-message DeleteProfileAvatarResponse {
-    // only error 
-}
-
-
-message UpdateProfileResponse {
-    
-}
+message ChangeProfileAvatarResponse {}

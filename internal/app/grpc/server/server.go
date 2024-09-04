@@ -20,8 +20,9 @@ type ProfileService interface {
 
 type AvatarService interface {
 	AddProfileAvatar(context.Context, *model.Avatar) error
+	ChangeProfileAvatar(context.Context, int64, int64) error
 	GetAllProfileAvatars(context.Context, int64) (model.Avatars, error)
-	DeleteProfileAvatar(context.Context, *model.Avatar) error
+	DeleteProfileAvatar(context.Context, int64, int64) error
 }
 
 type ProfileGRPCServer struct {
@@ -52,6 +53,10 @@ func (s *ProfileGRPCServer) UpdateProfile(ctx context.Context, req *pb.UpdatePro
 
 func (s *ProfileGRPCServer) AddProfileAvatar(ctx context.Context, req *pb.AddProfileAvatarRequest) (*pb.AddProfileAvatarResponse, error) {
 	return adapter.AddProfileAvatar(ctx, req, s.avatarService)
+}
+
+func (s *ProfileGRPCServer) ChangeProfileAvatar(ctx context.Context, req *pb.ChangeProfileAvatarRequest) (*pb.ChangeProfileAvatarResponse, error) {
+	return adapter.ChangeProfileAvatarAdapter(ctx, req, s.avatarService)
 }
 
 func (s *ProfileGRPCServer) DeleteProfileAvatar(ctx context.Context, req *pb.DeleteProfileAvatarRequest) (*pb.DeleteProfileAvatarResponse, error) {

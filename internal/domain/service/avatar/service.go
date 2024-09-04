@@ -8,8 +8,12 @@ import (
 
 type AvatarRepository interface {
 	Create(context.Context, *model.Avatar) error
-	SetAvatar(context.Context, int64, int64) error
-	GetProfileAvatars(context.Context, int64) ([]*model.Avatar, error)
+	Delete(context.Context, int64, int64) error
+
+	Select(context.Context, int64, int64) error
+	Unselect(context.Context, int64) error
+
+	GetAll(context.Context, int64) ([]*model.Avatar, error)
 }
 
 // Service has access to repositories and APIs of other services

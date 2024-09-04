@@ -148,6 +148,15 @@ func TestProfileRepository_GetByUsername(t *testing.T) {
 	}
 }
 
+func TestProfileRepository_DeleteProfileById(t *testing.T) {
+	db := getTestingDB(t)
+	defer db.Close()
+
+	r := repository.NewProfileRepository(db)
+
+	fmt.Println(r.DeleteProfileById(context.Background(), 2))
+}
+
 func TestProfileRepository_UpdateData(t *testing.T) {
 	db := getTestingDB(t)
 	defer db.Close()
